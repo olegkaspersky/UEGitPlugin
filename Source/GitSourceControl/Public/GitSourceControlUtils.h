@@ -81,7 +81,7 @@ FString FindGitBinaryPath();
 /**
  * Run a Git "version" command to check the availability of the binary.
  * @param InPathToGitBinary		The path to the Git binary
- * @param OutGitVersion         If provided, populate with the git version parsed from "version" command
+ * @param OutVersion            If provided, populate with the git version parsed from "version" command
  * @returns true if the command succeeded and returned no errors
  */
 bool CheckGitAvailability(const FString& InPathToGitBinary, FGitVersion* OutVersion = nullptr);
@@ -96,14 +96,14 @@ bool CheckGitAvailability(const FString& InPathToGitBinary, FGitVersion* OutVers
 	/**
 		* Check git for various optional capabilities by various means.
 		* @param InPathToGitBinary		The path to the Git binary
-		* @param OutGitVersion			If provided, populate with the git version parsed from "version" command
+		* @param OutVersion			    If provided, populate with the git version parsed from "version" command
 		*/
 	void FindGitCapabilities(const FString& InPathToGitBinary, FGitVersion* OutVersion);
 
 	/**
 		* Run a Git "lfs" command to check the availability of the "Large File System" extension.
 		* @param InPathToGitBinary		The path to the Git binary
-		* @param OutGitVersion			If provided, populate with the git version parsed from "version" command
+		* @param OutVersion			If provided, populate with the git version parsed from "version" command
 		*/
 	void FindGitLfsCapabilities(const FString& InPathToGitBinary, FGitVersion* OutVersion);
 
@@ -120,7 +120,7 @@ bool FindRootDirectory(const FString& InPath, FString& OutRepositoryRoot);
  * @param	InPathToGitBinary	The path to the Git binary
  * @param	InRepositoryRoot	The Git repository from where to run the command - usually the Game directory (can be empty)
  * @param	OutUserName			Name of the Git user configured for this repository (or globaly)
- * @param	OutEmailName		E-mail of the Git user configured for this repository (or globaly)
+ * @param	OutUserEmail		E-mail of the Git user configured for this repository (or globaly)
  */
 void GetUserConfig(const FString& InPathToGitBinary, const FString& InRepositoryRoot, FString& OutUserName, FString& OutUserEmail);
 
@@ -199,7 +199,7 @@ bool ListFilesInDirectoryRecurse(const FString& InPathToGitBinary, const FString
  *
  * @param	InPathToGitBinary	The path to the Git binary
  * @param	InRepositoryRoot	The Git repository from where to run the command - usually the Game directory
- * @param	InParameter			The parameters to the Git commit command
+ * @param	InParameters		The parameters to the Git commit command
  * @param	InFiles				The files to be operated on
  * @param	OutErrorMessages	Any errors (from StdErr) as an array per-line
  * @returns true if the command succeeded and returned no errors
