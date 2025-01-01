@@ -120,12 +120,14 @@ void FGitSourceControlProvider::CheckRepositoryStatus()
 		if (!IsInGameThread())
 		{
 			// Wait until the module interface is valid
-			IModuleInterface* GitModule;
 			do
 			{
-				GitModule = FModuleManager::Get().GetModule("GitSourceControl");
-				FPlatformProcess::Sleep(0.0f);
-			} while (!GitModule);
+				if (FModuleManager::Get().IsModuleLoaded("GitSourceControl"))
+				{
+					break;
+				}
+				FPlatformProcess::Sleep(0.01f);
+			} while (true);
 		}
 
 		// Get user name & email (of the repository, else from the global Git config)
