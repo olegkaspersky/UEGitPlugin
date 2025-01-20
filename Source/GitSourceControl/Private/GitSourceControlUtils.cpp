@@ -2360,6 +2360,7 @@ bool CheckLFSLockable(const FString& InPathToGitBinary, const FString& InReposit
 {
 	TArray<FString> Results;
 	TArray<FString> Parameters;
+	LockableTypes.Empty(); // clear previous results
 	Parameters.Add(TEXT("lockable")); // follow file renames
 
 	const bool bResults = RunCommand(TEXT("check-attr"), InPathToGitBinary, InRepositoryRoot, Parameters, InFiles, Results, OutErrorMessages);

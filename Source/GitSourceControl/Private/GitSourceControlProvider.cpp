@@ -151,6 +151,19 @@ void FGitSourceControlProvider::CheckRepositoryStatus()
 					UE_LOG(LogSourceControl, Error, TEXT("%s"), *ErrorMessage);
 				}
 			}
+			else if (bUsingGitLfsLocking)
+			{
+				if (!GitSourceControlUtils::IsFileLFSLockable(".umap")
+					|| !GitSourceControlUtils::IsFileLFSLockable(".uasset"))
+				{
+					UE_LOG(LogSourceControl, Error, TEXT("Git LFS Locking is disabled. Files .uasset or .umap are not lockable. Make sure your .gitattributes is setting lockable attributes for .uasset or .umap at the root of the git repository."));
+					bUsingGitLfsLocking = false;
+				}
+				else
+				{
+					UE_LOG(LogSourceControl, Log, TEXT("Git LFS Locking is enabled."));
+				}
+			}
 			const TArray<FString> ProjectDirs{FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir()),
 											  FPaths::ConvertRelativePathToFull(FPaths::ProjectConfigDir()),
 											  FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath())};
