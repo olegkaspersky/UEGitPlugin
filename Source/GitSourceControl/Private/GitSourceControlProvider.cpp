@@ -149,7 +149,7 @@ void FGitSourceControlProvider::CheckRepositoryStatus()
 					UE_LOG(LogSourceControl, Error, TEXT("%s"), *ErrorMessage);
 				}
 			}
-			else
+			else if (bUsingGitLfsLocking)
 			{
 				if (!GitSourceControlUtils::IsFileLFSLockable(".umap")
 					|| !GitSourceControlUtils::IsFileLFSLockable(".uasset"))
