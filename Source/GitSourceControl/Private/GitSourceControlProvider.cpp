@@ -120,12 +120,14 @@ void FGitSourceControlProvider::CheckRepositoryStatus()
 		if (!IsInGameThread())
 		{
 			// Wait until the module interface is valid
-			IModuleInterface* GitModule;
 			do
 			{
-				GitModule = FModuleManager::Get().GetModule("GitSourceControl");
-				FPlatformProcess::Sleep(0.0f);
-			} while (!GitModule);
+				if (FModuleManager::Get().IsModuleLoaded("GitSourceControl"))
+				{
+					break;
+				}
+				FPlatformProcess::Sleep(0.01f);
+			} while (true);
 		}
 
 		// Get user name & email (of the repository, else from the global Git config)
@@ -147,6 +149,19 @@ void FGitSourceControlProvider::CheckRepositoryStatus()
 				for (const auto &ErrorMessage : LockableErrorMessages)
 				{
 					UE_LOG(LogSourceControl, Error, TEXT("%s"), *ErrorMessage);
+				}
+			}
+			else if (bUsingGitLfsLocking)
+			{
+				if (!GitSourceControlUtils::IsFileLFSLockable(".umap")
+					|| !GitSourceControlUtils::IsFileLFSLockable(".uasset"))
+				{
+					UE_LOG(LogSourceControl, Error, TEXT("Git LFS Locking is disabled. Files .uasset or .umap are not lockable. Make sure your .gitattributes is setting lockable attributes for .uasset or .umap at the root of the git repository."));
+					bUsingGitLfsLocking = false;
+				}
+				else
+				{
+					UE_LOG(LogSourceControl, Log, TEXT("Git LFS Locking is enabled."));
 				}
 			}
 			const TArray<FString> ProjectDirs{FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir()),
